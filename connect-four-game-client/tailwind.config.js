@@ -13,6 +13,9 @@ export default {
     fontFamily: {
       sans: ["CustomFont"],
     },
+    screens: {
+      sm: "500px",
+    },
     extend: {},
   },
   plugins: [],

@@ -1,10 +1,5 @@
-import React from "react";
 import check from "../../assets/images/icon-check.svg";
 import { Link } from "react-router-dom";
-
-// interface RulesProps {
-//   close?: () => void;
-// }
 
 const Rules = () => {
   return (

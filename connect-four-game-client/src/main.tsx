@@ -7,6 +7,7 @@ import "./index.css";
 import NotFoundPage from "./components/NotFoundPage.tsx";
 import Game from "./components/Game/Game.tsx";
 import Home from "./components/Home/Home.tsx";
+import JoinRoom from "./components/JoinRoom.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     element: <Rules />,
   },
   {
+    path: "/join-room",
+    element: <JoinRoom />,
+  },
+  {
     path: "/game/:roomId",
     element: <Game />,
   },
@@ -26,7 +31,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    {/* <App /> */}
     <RouterProvider router={router} />
   </React.StrictMode>
 );

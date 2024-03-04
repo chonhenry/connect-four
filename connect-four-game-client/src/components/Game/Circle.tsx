@@ -1,63 +1,47 @@
 import { FC, useState } from "react";
+import { Position } from "./Board";
 
 interface CircleProps {
-  top?: number;
-  left?: number;
-  col_idx: number;
-  row_idx: number;
+  left: number;
+  color?: "red" | "yellow";
+  position: Position;
+  onCircleClick: (position: Position) => void;
 }
 
-const Circle: FC<CircleProps> = ({ top, left, col_idx, row_idx }) => {
+const Circle: FC<CircleProps> = ({ left, position, onCircleClick }) => {
   const [isSelected, setIsSelected] = useState(false);
 
-  function position(): string {
+  function generateIdUsingPosition(): string {
     const pos = {
-      row: row_idx,
-      col: col_idx,
+      row: position.row,
+      col: position.col,
     };
 
     return JSON.stringify(pos);
   }
 
-  function getPosition(event: React.MouseEvent<HTMLDivElement>): void {
+  function onClick(event: React.MouseEvent<HTMLDivElement>): void {
     const position = JSON.parse(event.currentTarget.id);
 
-    console.log(position);
+    onCircleClick({ ...position, selected: "yellow" });
   }
 
   return isSelected ? (
     <div
-      id={position()}
+      id={generateIdUsingPosition()}
       className={`bg-yellow absolute w-[61px] h-[61px] rounded-full left-[${left}px]`}
-      onClick={getPosition}
+      onClick={onClick}
     ></div>
   ) : (
     <div
-      id={position()}
+      id={generateIdUsingPosition()}
       className={`hover:bg-yellow absolute w-[61px] h-[61px] rounded-full left-[${left}px] cursor-pointer`}
       onClick={(e) => {
         setIsSelected(true);
-        getPosition(e);
+        onClick(e);
       }}
     ></div>
   );
-
-  // return isSelected ? (
-  //   <div
-  //     id={position()}
-  //     className={`bg-yellow absolute w-[61px] h-[61px] rounded-full top-[${top}px] cursor-pointer`}
-  //     onClick={getPosition}
-  //   ></div>
-  // ) : (
-  //   <div
-  //     id={position()}
-  //     className={`hover:bg-yellow absolute w-[61px] h-[61px] rounded-full top-[${top}px] cursor-pointer`}
-  //     onClick={(e) => {
-  //       setIsSelected(true);
-  //       getPosition(e);
-  //     }}
-  //   ></div>
-  // );
 };
 
 export default Circle;

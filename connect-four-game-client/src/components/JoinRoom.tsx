@@ -13,7 +13,7 @@ const ERROR_MSG = `Room must be longer than ${MIN_LENGTH} characters and shorter
 const ERROR_MSG_NAME = `Name must be longer than ${MIN_NAME_LENGTH} characters and shorter than ${MAX_NAME_LENGTH} characters.`;
 
 const JoinRoom = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState("john doe");
   const [room, setRoom] = useState("");
   const [errorMsgInvalidRoom, setErrorMsgInvalidRoom] = useState("");
   const [errorMsgInvalidName, setErrorMsgInvalidName] = useState("");

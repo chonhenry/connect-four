@@ -11,13 +11,6 @@ const Home = () => {
           <img src={logo} />
         </div>
 
-        {/* <input
-          className="rounded-2xl border-2 border-b-[5px] mb-3 py-2 px-4 w-10/12 h-[50px]"
-          placeholder="Enter your name..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        /> */}
-
         <Link
           className="mb-3 px-4 border-2 border-b-[5px] w-10/12 h-[50px] bg-yellow rounded-lg active:border-dark-purple"
           to="/join-room"

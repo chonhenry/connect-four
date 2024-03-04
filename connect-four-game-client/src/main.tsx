@@ -1,13 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./App.tsx";
-import Rules from "./components/Rules/Rules.tsx";
 import "./index.css";
-import NotFoundPage from "./components/NotFoundPage.tsx";
+import Rules from "./components/Rules/Rules.tsx";
 import Game from "./components/Game/Game.tsx";
 import Home from "./components/Home/Home.tsx";
 import JoinRoom from "./components/JoinRoom.tsx";
+import NotFoundPage from "./components/NotFoundPage.tsx";
 
 const router = createBrowserRouter([
   {

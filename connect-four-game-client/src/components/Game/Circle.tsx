@@ -32,7 +32,12 @@ const col4 = "left-[218px]";
 const col5 = "left-[269px]";
 const col6 = "left-[321px]";
 
-const Circle: FC<CircleProps> = ({ left, position, onCircleClick }) => {
+const redTurn = "bg-red";
+const redTurnHover = "hover:bg-red";
+const yellowTurn = "bg-yellow";
+const yellowTurnHover = "hover:bg-yellow";
+
+const Circle: FC<CircleProps> = ({ left, position, color, onCircleClick }) => {
   const [isSelected, setIsSelected] = useState(false);
 
   function generateIdUsingPosition(): string {
@@ -47,19 +52,19 @@ const Circle: FC<CircleProps> = ({ left, position, onCircleClick }) => {
   function onClick(event: React.MouseEvent<HTMLDivElement>): void {
     const position = JSON.parse(event.currentTarget.id);
 
-    onCircleClick({ ...position, selected: "yellow" });
+    onCircleClick({ ...position, selected: color });
   }
 
   return isSelected ? (
     <div
       id={generateIdUsingPosition()}
-      className={`bg-yellow absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px]`}
+      className={`bg-${color} absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px]`}
       onClick={onClick}
     ></div>
   ) : (
     <div
       id={generateIdUsingPosition()}
-      className={`hover:bg-yellow absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px] cursor-pointer`}
+      className={`hover:bg-${color} absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px] cursor-pointer`}
       onClick={(e) => {
         setIsSelected(true);
 

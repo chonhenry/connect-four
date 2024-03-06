@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import boardLayerBlack from "../../assets/images/board-layer-black-large.svg";
 import boardLayerWhite from "../../assets/images/board-layer-white-large.svg";
 import redTurn from "../../assets/images/turn-background-red.svg";
@@ -42,7 +42,6 @@ const ROW_COUNT = 6;
 const COL_COUNT = 7;
 
 const Board = () => {
-  // const top = [19, 102, 186, 269, 352, 436];
   const rows = [
     { s: 12, m: 15, l: 19 },
     { s: 64, m: 83, l: 102 },
@@ -52,7 +51,6 @@ const Board = () => {
     { s: 270, m: 357, l: 436 },
   ];
 
-  // const left = [19, 102, 186, 270, 353, 436, 520];
   const columns = [
     { s: 12, m: 15, l: 19 },
     { s: 63, m: 83, l: 102 },
@@ -62,6 +60,8 @@ const Board = () => {
     { s: 269, m: 356, l: 436 },
     { s: 321, m: 425, l: 520 },
   ];
+
+  const [currentColor, setCurrentColor] = useState<"red" | "yellow">("red");
 
   const grid = generateGrid();
 
@@ -104,6 +104,7 @@ const Board = () => {
           key={`row-${row_idx}-col-${col_idx}`}
           left={column}
           position={pos}
+          color={currentColor}
           onCircleClick={onCircleClick}
         />
       );
@@ -112,6 +113,11 @@ const Board = () => {
 
   function onCircleClick(position: Position): void {
     console.log(position);
+    if (position.selected === "red") {
+      setCurrentColor("yellow");
+    } else if (position.selected === "yellow") {
+      setCurrentColor("red");
+    }
   }
 
   return (

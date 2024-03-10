@@ -231,16 +231,14 @@ const Board = () => {
     currentColor: string
   ) {
     let left = col;
+    let bottom = row;
     let right = col;
     let top = row;
-    let bottom = row;
-
-    console.log(grid[top + 1][left - 1]);
 
     while (
       left > 0 &&
-      top > 0 &&
-      grid[top + 1][left - 1].selected === currentColor
+      bottom < ROW_COUNT - 1 &&
+      grid[bottom + 1][left - 1].selected === currentColor
     ) {
       left--;
       top++;
@@ -248,11 +246,11 @@ const Board = () => {
 
     while (
       right < COL_COUNT - 1 &&
-      bottom < ROW_COUNT - 1 &&
-      grid[bottom - 1][right + 1].selected === currentColor
+      top > 0 &&
+      grid[top - 1][right + 1].selected === currentColor
     ) {
       right++;
-      bottom--;
+      top--;
     }
 
     return right - left === 3;

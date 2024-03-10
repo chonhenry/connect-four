@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import boardLayerBlack from "../../assets/images/board-layer-black-large.svg";
 import boardLayerWhite from "../../assets/images/board-layer-white-large.svg";
 import redTurn from "../../assets/images/turn-background-red.svg";
 import yellowTurn from "../../assets/images/turn-background-yellow.svg";
 import Circle from "./Circle";
+import _ from "lodash";
 
 export interface Position {
   row: number;
@@ -62,8 +63,7 @@ const Board = () => {
   ];
 
   const [currentColor, setCurrentColor] = useState<"red" | "yellow">("red");
-
-  const grid = generateGrid();
+  const [grid, setGrid] = useState<Position[][]>(generateGrid());
 
   function generateGrid(): Position[][] {
     const grid = [];
@@ -106,18 +106,167 @@ const Board = () => {
           position={pos}
           color={currentColor}
           onCircleClick={onCircleClick}
+          isValid={isValid}
         />
       );
     });
   }
 
   function onCircleClick(position: Position): void {
-    console.log(position);
+    const row = position.row;
+    const col = position.col;
+
+    let newGrid = _.cloneDeep(grid);
+    newGrid[row][col].selected = currentColor;
+    setGrid(newGrid);
+
+    if (checkHorizontal(row, col, currentColor)) {
+      console.log(position.selected + " wins horizontally");
+      return;
+    }
+
+    if (checkVertical(row, col, currentColor)) {
+      console.log(position.selected + " wins vertically");
+      return;
+    }
+
+    if (checkDiagonalTopLeftToBottomRight(row, col, currentColor)) {
+      console.log(
+        position.selected + " wins diagonally top left to bottom right"
+      );
+      return;
+    }
+
+    if (checkDiagonalBottomLeftToTopRight(row, col, currentColor)) {
+      console.log(
+        position.selected + " wins diagonally bottom left to top right"
+      );
+      return;
+    }
+
     if (position.selected === "red") {
       setCurrentColor("yellow");
     } else if (position.selected === "yellow") {
       setCurrentColor("red");
     }
+  }
+
+  function isValid(row: number, col: number): boolean {
+    if (row === 5) return true;
+    if (grid[row + 1][col].selected !== null) return true;
+    return false;
+  }
+
+  function checkHorizontal(
+    row: number,
+    col: number,
+    currentColor: string
+  ): boolean {
+    let left = col;
+    let right = col;
+
+    while (left > 0 && grid[row][left - 1].selected === currentColor) left--;
+    while (
+      right < COL_COUNT - 1 &&
+      grid[row][right + 1].selected === currentColor
+    )
+      right++;
+
+    return right - left === 3;
+  }
+
+  function checkVertical(
+    row: number,
+    col: number,
+    currentColor: string
+  ): boolean {
+    let top = row;
+    let bottom = row;
+
+    while (top > 0 && grid[top - 1][col].selected === currentColor) top--;
+
+    while (
+      bottom < ROW_COUNT - 1 &&
+      grid[bottom + 1][col].selected === currentColor
+    )
+      bottom++;
+
+    return bottom - top === 3;
+  }
+
+  function checkDiagonalTopLeftToBottomRight(
+    row: number,
+    col: number,
+    currentColor: string
+  ): boolean {
+    let left = col;
+    let right = col;
+    let top = row;
+    let bottom = row;
+
+    while (
+      left > 0 &&
+      top > 0 &&
+      grid[top - 1][left - 1].selected === currentColor
+    ) {
+      left--;
+      top--;
+    }
+
+    while (
+      right < COL_COUNT - 1 &&
+      bottom < ROW_COUNT - 1 &&
+      grid[bottom + 1][right + 1].selected === currentColor
+    ) {
+      right++;
+      bottom++;
+    }
+
+    return right - left === 3;
+  }
+
+  function checkDiagonalBottomLeftToTopRight(
+    row: number,
+    col: number,
+    currentColor: string
+  ) {
+    let left = col;
+    let right = col;
+    let top = row;
+    let bottom = row;
+
+    console.log(grid[top + 1][left - 1]);
+
+    while (
+      left > 0 &&
+      top > 0 &&
+      grid[top + 1][left - 1].selected === currentColor
+    ) {
+      left--;
+      top++;
+    }
+
+    while (
+      right < COL_COUNT - 1 &&
+      bottom < ROW_COUNT - 1 &&
+      grid[bottom - 1][right + 1].selected === currentColor
+    ) {
+      right++;
+      bottom--;
+    }
+
+    return right - left === 3;
+  }
+
+  function printGrid() {
+    const c: any = [];
+    grid.forEach((row) => {
+      const r: any = [];
+      row.forEach((col) => {
+        r.push(col.selected);
+      });
+      console.log(r);
+    });
   }
 
   return (
@@ -130,7 +279,7 @@ const Board = () => {
         <img
           src={redTurn}
           className="w-[70px] xs:w-[100px]"
-          onClick={() => console.log(grid)}
+          onClick={printGrid}
         />
       </div>
     </div>

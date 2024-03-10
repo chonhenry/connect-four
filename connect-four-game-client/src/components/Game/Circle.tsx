@@ -3,9 +3,10 @@ import { Position, Size } from "./Board";
 
 interface CircleProps {
   left: Size;
-  color?: "red" | "yellow";
+  color: "red" | "yellow" | null;
   position: Position;
   onCircleClick: (position: Position) => void;
+  isValid: (row: number, col: number) => boolean;
 }
 
 const md_col0 = "md:left-[19px]";
@@ -37,8 +38,17 @@ const redTurnHover = "hover:bg-red";
 const yellowTurn = "bg-yellow";
 const yellowTurnHover = "hover:bg-yellow";
 
-const Circle: FC<CircleProps> = ({ left, position, color, onCircleClick }) => {
+const Circle: FC<CircleProps> = ({
+  left,
+  position,
+  color,
+  onCircleClick,
+  isValid,
+}) => {
   const [isSelected, setIsSelected] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<"red" | "yellow" | null>(
+    null
+  );
 
   function generateIdUsingPosition(): string {
     const pos = {
@@ -52,24 +62,31 @@ const Circle: FC<CircleProps> = ({ left, position, color, onCircleClick }) => {
   function onClick(event: React.MouseEvent<HTMLDivElement>): void {
     const position = JSON.parse(event.currentTarget.id);
 
+    const validPosition = isValid(position.row, position.col);
+
+    if (
+      color === undefined ||
+      selectedColor !== null ||
+      validPosition === false
+    )
+      return;
+
+    setSelectedColor(color);
+
     onCircleClick({ ...position, selected: color });
   }
 
-  return isSelected ? (
+  return selectedColor !== null ? (
     <div
       id={generateIdUsingPosition()}
-      className={`bg-${color} absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px]`}
+      className={`bg-${selectedColor} absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px]`}
       onClick={onClick}
     ></div>
   ) : (
     <div
       id={generateIdUsingPosition()}
       className={`hover:bg-${color} absolute w-[37px] h-[37px] xs:w-[50px] xs:h-[50px] md:w-[61px] md:h-[61px] rounded-full left-[${left.s}px] xs:left-[${left.m}px] md:left-[${left.l}px] cursor-pointer`}
-      onClick={(e) => {
-        setIsSelected(true);
-
-        onClick(e);
-      }}
+      onClick={onClick}
     ></div>
   );
 };
